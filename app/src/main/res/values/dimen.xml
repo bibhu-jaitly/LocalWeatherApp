@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="current_temp_text_size">96sp</dimen>
+    <dimen name="current_location_text_size">36sp</dimen>
+    <dimen name="weather_item_day_text_size">16sp</dimen>
+    <dimen name="error_text_size">54sp</dimen>
+
+    <dimen name="common_margin_value">16dp</dimen>
+    <dimen name="weather_item_height">80dp</dimen>
+    <dimen name="item_separator_height">1dp</dimen>
+    <dimen name="progress_image_size">96dp</dimen>
+    <dimen name="current_temp_top_margin">56dp</dimen>
+    <dimen name="current_location_bottom_margin">62dp</dimen>
+    <dimen name="retry_btn_top_margin">44dp</dimen>
+    <dimen name="retry_btn_padding">10dp</dimen>
+    <dimen name="retry_btn_corner_radius">4dp</dimen>
+
+</resources>

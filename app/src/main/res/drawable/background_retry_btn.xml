@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="@color/retry_btn_bg_color" />
+
+    <padding
+        android:bottom="@dimen/retry_btn_padding"
+        android:left="@dimen/common_margin_value"
+        android:right="@dimen/common_margin_value"
+        android:top="@dimen/retry_btn_padding" />
+
+    <corners
+        android:radius="@dimen/retry_btn_corner_radius"/>
+
+</shape>

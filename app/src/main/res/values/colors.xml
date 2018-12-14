@@ -3,4 +3,12 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="current_temperature">#2a2a2a</color>
+    <color name="current_location">#556799</color>
+    <color name="home_screen_bg_color">#f5f6f7</color>
+    <color name="error_text_color">#ffffff</color>
+    <color name="retry_btn_bg_color">#4a4a4a</color>
+    <color name="error_state_home_bg_color">#e85959</color>
+    <color name="weather_item_text_color">#2a2a2a</color>
 </resources>
