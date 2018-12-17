@@ -8,6 +8,7 @@ import retrofit2.http.Query;
 
 public interface APIService {
 
-    @GET()
-    Observable<WeatherApiResponse> getWeatherData(@Query("q") String city, @Query("days") int days);
+  @GET("forecast.json")
+  Observable<WeatherApiResponse> getWeatherData(@Query("key") String key, @Query("q") String city,
+      @Query("days") int days);
 }

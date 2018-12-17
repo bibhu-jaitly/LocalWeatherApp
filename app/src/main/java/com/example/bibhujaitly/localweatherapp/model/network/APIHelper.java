@@ -11,9 +11,9 @@ public class APIHelper {
 
   Retrofit retrofit;
 
-  public Retrofit getRerofitInstance() {
+  public Retrofit getRetrofitInstance() {
     if (retrofit == null) {
-      retrofit = new Retrofit.Builder().baseUrl("test")
+      retrofit = new Retrofit.Builder().baseUrl(NetworkUtil.BASE_URL)
           .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
           .addConverterFactory(GsonConverterFactory.create()).client(new OkHttpClient())
           .build();
@@ -22,6 +22,8 @@ public class APIHelper {
   }
 
   public Observable<WeatherApiResponse> getWeatherApi(String city, int days) {
-        return getRerofitInstance().create(APIService.class).getWeatherData(city, days).cache();
+    return getRetrofitInstance().create(APIService.class)
+        .getWeatherData(NetworkUtil.API_KEY, city, days)
+        .cache();
   }
 }

@@ -12,15 +12,12 @@ public interface MainContract {
         void hideProgress();
 
         void showFetchedData(WeatherApiResponse response);
+        void requestPermission();
+        void fetchData();
     }
 
     interface Presenter {
 
         void requestWeatherData(String city, int days);
-
     }
-
-    interface NetworkApiHelper {
-    }
-
 }

@@ -4,81 +4,95 @@
     android:id="@+id/home_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/home_screen_bg_color">
+    android:background="@color/home_screen_bg_color"
+    >
 
-    <TextView
-        android:id="@+id/current_temp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/current_temp_top_margin"
-        android:gravity="center"
-        android:textColor="@color/current_temperature"
-        android:textSize="@dimen/current_temp_text_size"
-        android:textStyle="bold"
-        android:visibility="gone" />
+  <TextView
+      android:id="@+id/current_temp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerHorizontal="true"
+      android:layout_marginTop="@dimen/current_temp_top_margin"
+      android:gravity="center"
+      android:textColor="@color/current_temperature"
+      android:textSize="@dimen/current_temp_text_size"
+      android:textStyle="bold"
+      android:visibility="gone"
+      />
 
-    <TextView
-        android:id="@+id/current_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/current_temp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/current_location_bottom_margin"
-        android:gravity="center"
-        android:textColor="@color/current_location"
-        android:textSize="@dimen/current_location_text_size"
-        android:visibility="gone" />
+  <TextView
+      android:id="@+id/current_location"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/current_temp"
+      android:layout_centerHorizontal="true"
+      android:layout_marginBottom="@dimen/current_location_bottom_margin"
+      android:gravity="center"
+      android:textColor="@color/current_location"
+      android:textSize="@dimen/current_location_text_size"
+      android:visibility="gone"
+      />
+
+  <FrameLayout
+      android:id="@+id/weather_list_layout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:visibility="gone"
+      android:layout_below="@id/current_location"
+      >
 
     <include
-        android:id="@+id/weather_list_layout"
         layout="@layout/layout_weather_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/current_location"
-        android:visibility="gone" />
+        />
+  </FrameLayout>
 
-    <ImageView
-        android:id="@+id/loading_icon"
-        android:layout_width="@dimen/progress_image_size"
-        android:layout_height="@dimen/progress_image_size"
-        android:layout_centerInParent="true"
-        android:src="@drawable/ic_loading"
-        android:visibility="gone" />
+  <ImageView
+      android:id="@+id/loading_icon"
+      android:layout_width="@dimen/progress_image_size"
+      android:layout_height="@dimen/progress_image_size"
+      android:layout_centerInParent="true"
+      android:src="@drawable/ic_loading"
+      android:visibility="gone"
+      />
 
-    <LinearLayout
-        android:id="@+id/error_state_container"
+  <LinearLayout
+      android:id="@+id/error_state_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:gravity="center_horizontal"
+      android:orientation="vertical"
+      android:visibility="gone"
+      >
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="@dimen/common_margin_value"
+        android:layout_marginLeft="@dimen/common_margin_value"
+        android:layout_marginRight="@dimen/common_margin_value"
+        android:layout_marginStart="@dimen/common_margin_value"
+        android:gravity="center"
+        android:text="@string/error_msg"
+        android:textColor="@color/error_text_color"
+        android:textSize="@dimen/error_text_size"
+        />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="@dimen/common_margin_value"
-            android:layout_marginLeft="@dimen/common_margin_value"
-            android:layout_marginEnd="@dimen/common_margin_value"
-            android:layout_marginRight="@dimen/common_margin_value"
-            android:gravity="center"
-            android:text="@string/error_msg"
-            android:textColor="@color/error_text_color"
-            android:textSize="@dimen/error_text_size" />
-
-        <TextView
-            android:id="@+id/retry_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/retry_btn_top_margin"
-            android:background="@drawable/background_retry_btn"
-            android:text="@string/retry_btn_text"
-            android:textColor="@color/error_text_color"
-            android:textSize="@dimen/weather_item_day_text_size" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/retry_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/retry_btn_top_margin"
+        android:background="@drawable/background_retry_btn"
+        android:text="@string/retry_btn_text"
+        android:textColor="@color/error_text_color"
+        android:textSize="@dimen/weather_item_day_text_size"
+        />
+  </LinearLayout>
 
 
 </RelativeLayout>
