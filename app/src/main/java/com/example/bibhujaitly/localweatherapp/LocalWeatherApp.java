@@ -6,4 +6,7 @@ public class LocalWeatherApp extends Application {
 
 
 
+  @Override public void onCreate() {
+    super.onCreate();
+  }
 }

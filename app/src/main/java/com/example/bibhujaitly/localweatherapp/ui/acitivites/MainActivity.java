@@ -17,6 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.bibhujaitly.localweatherapp.R;
+import com.example.bibhujaitly.localweatherapp.dagger.component.ActivityComponent;
+import com.example.bibhujaitly.localweatherapp.dagger.component.DaggerActivityComponent;
 import com.example.bibhujaitly.localweatherapp.model.pojo.WeatherApiResponse;
 import com.example.bibhujaitly.localweatherapp.ui.adapter.WeatherListAdapter;
 import com.example.bibhujaitly.localweatherapp.ui.contracts.MainContract;
@@ -26,11 +28,10 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
+import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import javax.inject.Inject;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
@@ -52,13 +53,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
   //recyclerview declaration
   private WeatherListAdapter adapter;
 
-  private MainPresenter presenter;
+  @Inject
+  MainPresenter presenter;
+
   private String city, DEGREE = "\u00b0";
   private final int days = 5;
   private CompositeDisposable compositeDisposable;
   private FusedLocationProviderClient providerClient;
   private LocationCallback locationCallback;
   private LocationRequest locationRequest;
+  private ActivityComponent component;
 
   private boolean mRequestingLocationUpdates = true;
 
@@ -70,14 +74,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     initComponents();
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-
+    component = DaggerActivityComponent.create();
+    component.inject(this);
+    //component = DaggerActivityComponent.create();
+    //presenter = component.getPresenter();
     initializeViews();
   }
 
   private void initComponents() {
     rxPermissions = new RxPermissions(MainActivity.this);
     compositeDisposable = new CompositeDisposable();
-    presenter = new MainPresenter(this, compositeDisposable);
     providerClient = getFusedLocationProviderClient(this);
     locationRequest = new LocationRequest();
     locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -86,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
   }
 
   private void initializeViews() {
+    presenter.attachView(this);
+    presenter.getCompositeDisposable(compositeDisposable);
     weatherRv = findViewById(R.id.weather_rv);
     currentTemp = findViewById(R.id.current_temp);
     currentLocation = findViewById(R.id.current_location);
@@ -99,37 +107,23 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     retryBtn.setOnClickListener(v -> fetchData());
   }
 
-  @Override protected void onResume() {
+  @Override
+  protected void onResume() {
     super.onResume();
   }
 
-  @Override protected void onPause() {
+  @Override
+  protected void onPause() {
     //providerClient
     stopLocationRequest();
     super.onPause();
   }
 
-  @Override protected void onDestroy() {
-    Observable.just(true)
-        .subscribeOn(Schedulers.computation())
-        .observeOn(Schedulers.computation())
-        .subscribe(new Observer<Boolean>() {
-          @Override public void onSubscribe(Disposable d) {
-
-          }
-
-          @Override public void onNext(Boolean aBoolean) {
-            compositeDisposable.clear();
-          }
-
-          @Override public void onError(Throwable e) {
-
-          }
-
-          @Override public void onComplete() {
-
-          }
-        });
+  @Override
+  protected void onDestroy() {
+    presenter.detachView();
+    Single.create(emitter -> compositeDisposable.clear())
+        .subscribeOn(Schedulers.computation()).subscribe();
     super.onDestroy();
   }
 
@@ -180,7 +174,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     hideError();
     currentLocation.setText(response.getLocation().getName());
     currentTemp.setText(String.format("%s%s C", response.getCurrent().getTempC(), DEGREE));
-    adapter = new WeatherListAdapter(MainActivity.this, response.getForecast().getForecastday());
+    adapter = new WeatherListAdapter(MainActivity.this);
+    adapter.setForeCastList(response.getForecast().getForecastday());
     initializeRV();
   }
 
@@ -188,7 +183,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     LinearLayoutManager manager = new LinearLayoutManager(MainActivity.this);
     weatherRv.setLayoutManager(manager);
     weatherRv.setAdapter(adapter);
-    adapter.notifyDataSetChanged();
   }
 
   private void animateWeatherList() {
@@ -199,14 +193,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
 
   @Override
   public void requestPermission() {
-    compositeDisposable.add(rxPermissions.requestEach(Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_FINE_LOCATION)
-        .takeWhile(permission -> {
-          if (!permission.granted) {
-            showPermissionError();
-          }
-          return permission.granted;
-        })
+    compositeDisposable.add(rxPermissions.requestEach(Manifest.permission.ACCESS_FINE_LOCATION)
         .subscribe(permission -> {
           if (permission.granted) {
             startLocationUpdate();
@@ -247,11 +234,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         }
         if (mRequestingLocationUpdates) {
           mRequestingLocationUpdates = false;
-          city =
-              locationResult.getLastLocation().getLatitude()
-                  + ","
-                  + locationResult.getLastLocation()
-                  .getLongitude();
+          city = locationResult.getLastLocation().getLatitude() + ","
+              + locationResult.getLastLocation().getLongitude();
           fetchData();
         }
         stopLocationRequest();

@@ -1,6 +1,6 @@
 package com.example.bibhujaitly.localweatherapp.model.network;
 
-public class NetworkUtil {
+public final class NetworkUtil {
 
   public static final String BASE_URL = "https://api.apixu.com/v1/";
 
